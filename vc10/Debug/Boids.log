@@ -1,0 +1,49 @@
+﻿Build started 12/07/2012 00:17:05.
+     1>Project "C:\Programming\CinderProjects\Boids\vc10\Boids.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Boids.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\include /I"..\..\..\..\Program Files (x86)\cinder_0.8.3_vc2010\include" /I"..\..\..\..\Program Files (x86)\cinder_0.8.3_vc2010\boost" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\src\Agent.cpp
+         Agent.cpp
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(114): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(118): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(141): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(142): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(154): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(155): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(199): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(266): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(270): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\programming\cinderprojects\boids\src\agent.cpp(274): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\program files (x86)\cinder_0.8.3_vc2010\include\cinder\vector.h(1286): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+                 c:\programming\cinderprojects\boids\src\agent.cpp(22) : see reference to function template instantiation 'cinder::Vec2<T> cinder::operator *<float,double>(const cinder::Vec2<T> &,Y)' being compiled
+                 with
+                 [
+                     T=float,
+                     Y=double
+                 ]
+     1>c:\program files (x86)\cinder_0.8.3_vc2010\include\cinder\vector.h(1286): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+       ResourceCompile:
+         All outputs are up-to-date.
+       ManifestResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Programming\CinderProjects\Boids\vc10\Debug\Boids.exe" /INCREMENTAL /NOLOGO /LIBPATH:"..\..\..\..\Program Files (x86)\cinder_0.8.3_vc2010\lib" /LIBPATH:"..\..\..\..\Program Files (x86)\cinder_0.8.3_vc2010\lib\msw" cinder_d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:LIBCMT /MANIFEST /ManifestFile:"Debug\Boids.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Programming\CinderProjects\Boids\vc10\Debug\Boids.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Programming\CinderProjects\Boids\vc10\Debug\Boids.lib" /MACHINE:X86 Debug\Resources.res
+         Debug\Boids.exe.embed.manifest.res
+         Debug\Agent.obj
+         Debug\AgentController.obj
+         Debug\Boids.obj
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\Boids.exe.embed.manifest" /manifest Debug\Boids.exe.intermediate.manifest
+         All outputs are up-to-date.
+       LinkEmbedManifest:
+         All outputs are up-to-date.
+         Boids.vcxproj -> C:\Programming\CinderProjects\Boids\vc10\Debug\Boids.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\Boids.unsuccessfulbuild".
+         Touching "Debug\Boids.lastbuildstate".
+     1>Done Building Project "C:\Programming\CinderProjects\Boids\vc10\Boids.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:07.56
