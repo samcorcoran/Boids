@@ -19,7 +19,7 @@ Agent::Agent( Vec2f loc, int newAgentId )
 	mLoc			= Vec3f(loc, 0.0f);
 	console() << "Loc: " << mLoc << std::endl;
 	//mVel			= Rand::randVec2f() * Rand::randFloat(1,2);
-	mVel			= Rand::randVec2f() * 1.5;
+	mVel			= Rand::randVec2f() * 2.5;
 
 	agentId			= newAgentId;
 
@@ -31,6 +31,7 @@ Agent::Agent( Vec2f loc, int newAgentId )
 	mLifespan		= Rand::randInt( 50, 250 );
 	mAgePer			= 1.0f;
 	mIsDead			= false;
+	mVisualDistance = 150.0f;
 
 	lastSeparation = Vec2f::zero();
 	lastCohesion = Vec2f::zero();
@@ -39,12 +40,11 @@ Agent::Agent( Vec2f loc, int newAgentId )
 	lastNewHeading = Vec2f::zero();
 }	
 
-void Agent::update( const Vec2i &mouseLoc, std::list<Agent> &mAgents, const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds )
+void Agent::update( const Vec2i &mouseLoc, std::list<Agent> &neighbourAgents, const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds )
 {	
 	
-	calculateNewHeading(mAgents, mouseLoc, ruleWeights, ruleRanges, ruleSamples, ruleCompatabilityThresholds);
-	
-	
+	calculateNewHeading(neighbourAgents, mouseLoc, ruleWeights, ruleRanges, ruleSamples, ruleCompatabilityThresholds);
+
 	mLoc.x += mVel.x;
 	mLoc.y += mVel.y;
 
@@ -161,7 +161,7 @@ void Agent::rotateAgentBy(double angle)
 	//app::console() << "New vel: " << mVel << std::endl;
 }
 
-void Agent::calculateNewHeading(std::list<Agent> &mAgents, const Vec2i &mouseLoc, const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds ){
+void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const Vec2i &mouseLoc, const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds ){
 
 	// Sum of Weights
 	float totalWeights = ruleWeights[0] + ruleWeights[1] + ruleWeights[2] + ruleWeights[3];
@@ -169,7 +169,7 @@ void Agent::calculateNewHeading(std::list<Agent> &mAgents, const Vec2i &mouseLoc
 	// Random Heading
 	float randWeight = ruleWeights[3] / totalWeights;
 	Vec2f randHeading = mVel;
-	if (Rand::randFloat() < 0.1) { 
+	if (Rand::randFloat() < 0.07) { 
 		randHeading = mVel;
 		rotate(randHeading, Rand::randFloat(toRadians(-10.0f), toRadians(10.0f)));
 	}
@@ -203,7 +203,14 @@ void Agent::calculateNewHeading(std::list<Agent> &mAgents, const Vec2i &mouseLoc
 	int alignmentPartners = 0;
 	int separationPartners = 0;
 
-	for( list<Agent>::iterator p = mAgents.begin(); p != mAgents.end(); ++p )
+	// Base maximum visual range on largest steering influence range
+	float visualRange = 10;
+	if (alignmentDistance > visualRange) visualRange = alignmentDistance;
+	if (cohesionDistance > visualRange) visualRange = cohesionDistance;
+	if (separationDistance > visualRange) visualRange = separationDistance;
+
+		
+	for( list<Agent>::iterator p = neighbourAgents.begin(); p != neighbourAgents.end(); ++p )
 	{
 		if ( p->mLoc != mLoc )
 		{
@@ -254,7 +261,7 @@ void Agent::calculateNewHeading(std::list<Agent> &mAgents, const Vec2i &mouseLoc
 				}
 			}
 			else{
-				console() << "Agent " << agentId << " excluded an agent behind it." << std::endl;
+				//console() << "Agent " << agentId << " excluded an agent behind it." << std::endl;
 			}
 		}
 	}

@@ -31,6 +31,7 @@ class Agent {
 	float		mDecay;
 	float		mRadius;
 	float		mScale;
+	float		mVisualDistance;
 	
 	float		mMass;
 	

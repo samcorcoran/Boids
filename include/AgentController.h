@@ -1,6 +1,7 @@
 #pragma once
 #include "Agent.h"
 #include <list>
+#include <vector>
 
 using namespace ci;
 using namespace ci::app;
@@ -13,6 +14,13 @@ class AgentController {
 	void addAgents( int amt, const ci::Vec2i &mouseLoc );
 	void removeAgents( int amt );
 	void clampLocToTorus(Vec3f &loc);
+	void getNearbyAgents(std::vector<Agent*> &nearbyAgents, Vec3f centreLocation, float radius);
+	int convertLocToBin(Vec3f &loc);
 
 	std::list<Agent>	mAgents;
+
+	std::vector< std::vector<Agent*> > bins;
+	float binSize;
+	int xBins, yBins;
+	
 };

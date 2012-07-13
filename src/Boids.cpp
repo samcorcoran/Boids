@@ -12,6 +12,7 @@
 #define NUM_AGENTS_TO_SPAWN 1
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH 800
+#define BIN_SIZE 25;
 
 using namespace ci;
 using namespace ci::app;
