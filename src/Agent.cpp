@@ -1,10 +1,16 @@
-#include "Agent.h"
+
 #include "cinder/Rand.h"
+#include "cinder/Vector.h"
 #include "cinder/CinderMath.h"
 #include "cinder/gl/gl.h"
 #include "cinder/app/AppBasic.h"
+
+#include "Agent.h"
+#include "InterfaceParams.h"
+
 #include <list>
 #include <cmath>
+#include <vector>
 
 using namespace ci;
 using namespace ci::app;
@@ -18,7 +24,6 @@ Agent::Agent( Vec2f loc, int newAgentId )
 {
 	mLoc			= Vec3f(loc, 0.0f);
 	console() << "Loc: " << mLoc << std::endl;
-	//mVel			= Rand::randVec2f() * Rand::randFloat(1,2);
 	mVel			= Rand::randVec2f() * 2.5;
 
 	agentId			= newAgentId;
@@ -40,69 +45,56 @@ Agent::Agent( Vec2f loc, int newAgentId )
 	lastNewHeading = Vec2f::zero();
 }	
 
-void Agent::update( const Vec2i &mouseLoc, std::list<Agent> &neighbourAgents, const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds )
+void Agent::update( const ci::Vec2i &mouseLoc, std::list<Agent> &neighbourAgents, InterfaceParams &interfaceParams )
 {	
-	
-	calculateNewHeading(neighbourAgents, mouseLoc, ruleWeights, ruleRanges, ruleSamples, ruleCompatabilityThresholds);
+	calculateNewHeading(neighbourAgents, mouseLoc, interfaceParams);
 
-	mLoc.x += mVel.x;
-	mLoc.y += mVel.y;
-
-	//if (mAge % 100 == 0){
-		//console() << "Agent at: " << mLoc << std::endl;
-	//}
-
-	mAge++;
-	//if( mAge > mLifespan ) mIsDead = true;
-	mAgePer = 1.0f - ( (float)mAge/(float)mLifespan );
-	
+	moveByVelocity();
 }
 
 void Agent::draw()
 {
-	//drawPoint(mLoc);
-	//gl::drawSolidCircle( mLoc, mRadius );
-
-
 	gl::color( Color( 1.0f, 1.0f, 1.0f ) );
-	//float arrowLength = 2.5f;
+	
 	float arrowLength = mVel.length() + 2;
-    //Vec3f p1( mLoc, 0.0f );
-	Vec3f p1 = mLoc;
-    Vec3f p2(Vec2f(mLoc.x, mLoc.y) + (mVel*arrowLength));
-    float headLength = 3.0f;
+	float headLength = 3.0f;
     float headRadius = 2.5f;
+
+	Vec3f p1 = mLoc;
+    Vec3f p2(Vec2f(mLoc.x, mLoc.y) + (mVel.normalized()*arrowLength));
+
 	gl::drawVector(p1, p2, headLength, headRadius );
 
-	if (lastCohesion.length() != 0)
-	{
-		drawVector(p1, Vec3f(lastCohesion, 0.0f), Color( 1.0f, 0.0f, 0.0f ) );
-	}
-	gl::color( Color( 1.0f, 1.0f, 1.0f ) );
-	if (lastAlignment.length() != 0)
-	{
-		drawVector(p1, Vec3f(lastAlignment, 0.0f), Color( 0.0f, 1.0f, 0.0f ) );
-	}
-	gl::color( Color( 1.0f, 1.0f, 1.0f ) );
-	if (lastSeparation.length() != 0)
-	{
-		drawVector(p1, Vec3f(lastSeparation, 0.0f), Color( 1.0f, 0.0f, 1.0f ) );
-	}
+	// Draw cohesion vector
+	drawVector(p1, Vec3f(lastCohesion, 0.0f), Color( 1.0f, 0.0f, 0.0f ) );
+	// Draw alignment vector		
+	drawVector(p1, Vec3f(lastAlignment, 0.0f), Color( 0.0f, 1.0f, 0.0f ) );
+	// Draw separation vector
+	drawVector(p1, Vec3f(lastSeparation, 0.0f), Color( 1.0f, 0.0f, 1.0f ) );
+	
 	gl::color( Color( 1.0f, 1.0f, 1.0f ) );
 }
 
-void Agent::drawVector(Vec3f startLoc, Vec3f vecToDraw, Color chosenColor)
+void Agent::moveByVelocity(){
+	mLoc.x += mVel.x;
+	mLoc.y += mVel.y;
+}
+
+void Agent::drawVector(ci::Vec3f startLoc, ci::Vec3f vecToDraw, Color chosenColor)
 {
-	float scaleFactor = 8.0f;
-	gl::color( chosenColor );
-    float headLength = 3.0f;
-    float headRadius = 3.0f;
-	//console() << "Drawing vec: " << vecToDraw << ", fromTo "<< startLoc << " " << startLoc+vecToDraw << ", len: " << vecToDraw.length() << std::endl;
-	gl::drawVector(startLoc, startLoc+(vecToDraw*scaleFactor), headLength, headRadius );
+	if (vecToDraw.length() != 0)
+	{
+		float scaleFactor = 8.0f;
+		gl::color( chosenColor );
+		float headLength = 3.0f;
+		float headRadius = 3.0f;
+		//console() << "Drawing vec: " << vecToDraw << ", fromTo "<< startLoc << " " << startLoc+vecToDraw << ", len: " << vecToDraw.length() << std::endl;
+		gl::drawVector(startLoc, startLoc+(vecToDraw*scaleFactor), headLength, headRadius );
+	}
 }
 
 // Adjusts mVel in direction of desired heading to as great a degree as maxTurn allows
-void Agent::turnTowardsHeading(Vec2f desiredHeading)
+void Agent::turnTowardsHeading(ci::Vec2f desiredHeading)
 {
 	//console() << "mVel: " << mVel << "  desired: " << desiredHeading << std::endl;
 	
@@ -134,9 +126,9 @@ void Agent::turnTowardsHeading(Vec2f desiredHeading)
 	}
 }
 
-void Agent::rotate(Vec2f &vec, double angle)
+void Agent::rotate(ci::Vec2f &vec, double angle)
 {
-	Vec2f newVec;
+	ci::Vec2f newVec;
 
 	float cosa = cos( angle );
 	float sina = sin( angle );
@@ -161,39 +153,38 @@ void Agent::rotateAgentBy(double angle)
 	//app::console() << "New vel: " << mVel << std::endl;
 }
 
-void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const Vec2i &mouseLoc, const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds ){
+void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const ci::Vec2i &mouseLoc, InterfaceParams interfaceParams ){
 
 	// Sum of Weights
-	float totalWeights = ruleWeights[0] + ruleWeights[1] + ruleWeights[2] + ruleWeights[3];
+	float totalWeights = interfaceParams.mAlignmentWeight + interfaceParams.mCohesionWeight + interfaceParams.mCohesionWeight + interfaceParams.mRandWeight;
 
 	// Random Heading
-	float randWeight = ruleWeights[3] / totalWeights;
-	Vec2f randHeading = mVel;
+	float randWeight = interfaceParams.mRandWeight / totalWeights;
+	ci::Vec2f randHeading = mVel;
 	if (Rand::randFloat() < 0.07) { 
-		randHeading = mVel;
 		rotate(randHeading, Rand::randFloat(toRadians(-10.0f), toRadians(10.0f)));
 	}
 	
 	// Cohesion heading
-	Vec2f cohesionHeading = Vec2f::zero();
-	float cohWeight = ruleWeights[0] / totalWeights;
-	float cohesionDistance = ruleRanges[0];
-	float cohesionSamples = ruleSamples[0];
-	float cohesionCompatabilityThresh = ruleCompatabilityThresholds[0];
+	ci::Vec2f cohesionHeading = Vec2f::zero();
+	float cohWeight = interfaceParams.mCohesionWeight / totalWeights;
+	float cohesionDistance = interfaceParams.mCohesionRange;
+	float cohesionSamples = interfaceParams.mCohesionSamples;
+	float cohesionCompatabilityThresh = interfaceParams.mCohesionCompatabilityThresh;
 
 	// Alignment heading
-	Vec2f alignmentHeading = Vec2f::zero();
-	float aliWeight = ruleWeights[1] / totalWeights;
-	float alignmentDistance = ruleRanges[1];
-	float alignmentnSamples = ruleSamples[1];
-	float alignmentCompatabilityThresh = ruleCompatabilityThresholds[1];
+	ci::Vec2f alignmentHeading = ci::Vec2f::zero();
+	float aliWeight = interfaceParams.mAlignmentWeight / totalWeights;
+	float alignmentDistance = interfaceParams.mAlignmentRange;
+	float alignmentnSamples = interfaceParams.mAlignmentSamples;
+	float alignmentCompatabilityThresh = interfaceParams.mAlignmentCompatabilityThresh;
 
 	// Separation heading
-	Vec2f separationHeading = Vec2f::zero();
-	float sepWeight = ruleWeights[2] / totalWeights;
-	float separationDistance = ruleRanges[2];
-	float separationSamples = ruleSamples[2];
-	float separationCompatabilityThresh = ruleCompatabilityThresholds[2];
+	ci::Vec2f separationHeading = ci::Vec2f::zero();
+	float sepWeight = interfaceParams.mSeparationWeight / totalWeights;
+	float separationDistance = interfaceParams.mSeparationRange;
+	float separationSamples = interfaceParams.mSeparationSamples;
+	float separationCompatabilityThresh = interfaceParams.mSeparationCompatabilityThresh;
 
 	// proportion of behind agent which will be ignored
 	float rearIgnoranceArc = 0.1;
@@ -215,7 +206,7 @@ void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const Vec2i &
 		if ( p->mLoc != mLoc )
 		{
 			// Retrieve heading to nextAgent
-			Vec3f vecToNextAgent = Vec3f::zero();
+			ci::Vec3f vecToNextAgent = ci::Vec3f::zero();
 			//vecToNextAgent = toroidalVectorTo(mLoc, p->mLoc);	
 			vecToNextAgent = p->mLoc - mLoc;	
 
@@ -230,7 +221,7 @@ void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const Vec2i &
 				// Check nextAgent's heading is similar enough for cohesion and near enough
 				if (vecSimilarity > cohesionCompatabilityThresh && vecToNextAgent.length() < cohesionDistance )
 				{ 
-					cohesionHeading = cohesionHeading + Vec2f(vecToNextAgent.x, vecToNextAgent.y);
+					cohesionHeading = cohesionHeading + ci::Vec2f(vecToNextAgent.x, vecToNextAgent.y);
 					cohesionPartners++;
 				}
 				else {
@@ -332,7 +323,7 @@ void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const Vec2i &
 	}
 }
 
-Vec3f Agent::toroidalVectorTo(const Vec3f &start, const Vec3f &end){
+ci::Vec3f Agent::toroidalVectorTo(const ci::Vec3f &start, const ci::Vec3f &end){
 	// Accomodate toroidal shape
 	
 	Vec3f vecToEnd = end - start;

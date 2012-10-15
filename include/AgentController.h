@@ -1,26 +1,36 @@
 #pragma once
-#include "Agent.h"
 #include <list>
 #include <vector>
 
+#include "Agent.h"
+#include "InterfaceParams.h"
+
 using namespace ci;
 using namespace ci::app;
+using std::list;
+using std::vector;
 
 class AgentController {
  public:
 	AgentController();
-	void update( const ci::Vec2i &mouseLoc,  const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds );
+	AgentController(const int binSize);
+	void update( const ci::Vec2i &mouseLoc, InterfaceParams &interfaceParams );
 	void draw();
 	void addAgents( int amt, const ci::Vec2i &mouseLoc );
 	void removeAgents( int amt );
 	void clampLocToTorus(Vec3f &loc);
-	void getNearbyAgents(std::vector<Agent*> &nearbyAgents, Vec3f centreLocation, float radius);
+	void sortAgentsIntoBins();
+	void getNearbyAgents(list<Agent*> &nearbyAgents, Vec3f centreLocation, float radius);
 	int convertLocToBin(Vec3f &loc);
 
-	std::list<Agent>	mAgents;
+	list<Agent>	mAgents;
 
-	std::vector< std::vector<Agent*> > bins;
-	float binSize;
-	int xBins, yBins;
+	// Spatial Binning variables
+	vector< list<int> > * bins;
+
+	int binSize;
+	int xBins;
+	int yBins;
+	int totalBins;
 	
 };

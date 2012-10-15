@@ -3,23 +3,27 @@
 #include "cinder/Vector.h"
 #include "cinder/Color.h"
 #include "cinder/Perlin.h"
+#include "InterfaceParams.h"
 #include <list>
 #include <vector>
 
+;
 using namespace ci;
+using namespace ci::app;
 
 class Agent {
  public:
 	Agent();
 	Agent( ci::Vec2f loc, int newAgentId );
-	void update( const Vec2i &mouseLoc, std::list<Agent> &mAgents, const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds );
+	void update( const ci::Vec2i &mouseLoc, std::list<Agent> &mAgents, InterfaceParams &interfaceParams);
 	void draw();
-	void drawVector(Vec3f startLoc, Vec3f vecToDraw, Color chosenColor);
-	void turnTowardsHeading(Vec2f desiredHeading);
-	void rotate(Vec2f &vec, double angle);
+	void drawVector(ci::Vec3f startLoc, ci::Vec3f vecToDraw, ci::Color chosenColor);
+	void moveByVelocity();
+	void turnTowardsHeading(ci::Vec2f desiredHeading);
+	void rotate(ci::Vec2f &vec, double angle);
 	void rotateAgentBy(double angle);
-	void calculateNewHeading(std::list<Agent> &mAgents, const Vec2i &mouseLoc, const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds );
-	Vec3f toroidalVectorTo(const Vec3f &start, const Vec3f &end );
+	void calculateNewHeading(std::list<Agent> &mAgents, const ci::Vec2i &mouseLoc, InterfaceParams interfaceParams );
+	ci::Vec3f toroidalVectorTo(const ci::Vec3f &start, const ci::Vec3f &end );
 	void Agent::printAgentVectors();
 
 	ci::Vec3f	mLoc;
@@ -40,9 +44,9 @@ class Agent {
 	float		mAgePer;
 	bool		mIsDead;
 
-	Vec2f lastSeparation;
-	Vec2f lastCohesion;
-	Vec2f lastAlignment;
-	Vec2f lastRand;
-	Vec2f lastNewHeading;
+	ci::Vec2f lastSeparation;
+	ci::Vec2f lastCohesion;
+	ci::Vec2f lastAlignment;
+	ci::Vec2f lastRand;
+	ci::Vec2f lastNewHeading;
 };

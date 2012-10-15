@@ -2,35 +2,47 @@
 #include "cinder/Rand.h"
 #include "cinder/Vector.h"
 #include "AgentController.h"
-#include <vector>
+#include "InterfaceParams.h"
+#include "Agent.h"
 
 using namespace ci;
 using namespace ci::app;
+using std::vector;
 using std::list;
-
 
 AgentController::AgentController()
 {
-	binSize = 10.0f;
+	binSize = 10;
 	// Hardcoded bin values
 	xBins = 1 + (int) 800 / binSize;
 	yBins = 1 + (int) 600 / binSize;
+	totalBins = xBins*yBins;
 
-	bins.resize(xBins * yBins);
+	vector<list<Agent*>> newBins(totalBins, list<Agent*>(10));
+	bins->assign(newBins);
 }
 
-void AgentController::update( const Vec2i &mouseLoc, const Vec4f &ruleWeights, const Vec3f &ruleRanges, const Vec3f &ruleSamples, const Vec3f &ruleCompatabilityThresholds)
+AgentController::AgentController(const int newBinSize)
 {
-	//// Binned locations for next round
-	//vector< vector<Agent*> > newBins;
-	//newBins.resize(xBins * yBins);
+	binSize = newBinSize;
+	// Hardcoded bin values
+	xBins = 1 + (int) 800 / binSize;
+	yBins = 1 + (int) 600 / binSize;
+	totalBins = xBins*yBins;
 
-	int n = bins.size();
-	for(int i = 0; i < n; i++)
-	{
-		bins[i].clear();
-	}
+	vector<list<Agent*>> newBins(totalBins, list<Agent*>(10));
+	bins = newBins;
+}
 
+void AgentController::update( const Vec2i &mouseLoc, InterfaceParams &interfaceParams)
+ {
+	//for(int i = 0; i < xBins; i++)
+	//{
+	//	for (int j = 0; j < yBins; j++ )
+	//	{
+	//		bins[i].clear();
+	//	}
+	//}
 
 	for( list<Agent>::iterator p = mAgents.begin(); p != mAgents.end(); ) {
 		if( p->mIsDead ){
@@ -38,15 +50,20 @@ void AgentController::update( const Vec2i &mouseLoc, const Vec4f &ruleWeights, c
 		} else {
 
 			// Determine this agent's neighbours
-			std::vector<Agent*> nearbyAgents;
+			list<Agent*> nearbyAgents;
 			getNearbyAgents(nearbyAgents, p->mLoc, p->mVisualDistance);
 
-			p->update( mouseLoc, mAgents, ruleWeights, ruleRanges, ruleSamples, ruleCompatabilityThresholds );
+			// Update agent's location
+			p->update( mouseLoc, mAgents, interfaceParams );
+
+			// Ensure location is in bounds
 			clampLocToTorus(p->mLoc);
+
+			
+
 			++p;
 		}
 	}
-
 }
 
 void AgentController::draw()
@@ -92,7 +109,29 @@ void AgentController::clampLocToTorus(Vec3f &loc )
 	}
 }
 
-void AgentController::getNearbyAgents(std::vector<Agent*> &nearbyAgents, Vec3f centreLocation, float radius)
+void AgentController::sortAgentsIntoBins()
+{
+	// Binned locations for next round
+	vector<list<Agent*>> newBins(totalBins, list<Agent*>(10));
+
+	for( list<Agent>::iterator p = mAgents.begin(); p != mAgents.end(); ) {
+		if( p->mIsDead ){
+			p = mAgents.erase( p );
+		}
+		else 
+		{
+			// Update agent's bin for new location
+			int binNumber = convertLocToBin(p->mLoc);
+			//List &nextList = *newBins[binNumber];
+			newBins[binNumber].push_back(p);
+		}
+	}
+
+	// Replace previous bin locations with new ones
+	bins = newBins;
+}
+
+void AgentController::getNearbyAgents(list<Agent*> &nearbyAgents, Vec3f centreLocation, float radius)
 {
 	// calculate number of surrounding bins required to search
 	int radiusInBins = ceil(radius/binSize);
