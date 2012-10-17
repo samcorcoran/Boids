@@ -26,11 +26,11 @@ class AgentController {
 	list<Agent>	mAgents;
 
 	// Spatial Binning variables
-	vector< list<int> > * bins;
+	vector<SpatialBin> * m_bins;
 
-	int binSize;
-	int xBins;
-	int yBins;
-	int totalBins;
+	int m_binSize;
+	int m_xBins;
+	int m_yBins;
+	int m_totalBins;
 	
 };

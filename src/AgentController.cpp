@@ -4,6 +4,7 @@
 #include "AgentController.h"
 #include "InterfaceParams.h"
 #include "Agent.h"
+#include "SpatialBin.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -12,26 +13,27 @@ using std::list;
 
 AgentController::AgentController()
 {
-	binSize = 10;
+	m_binSize = 10;
 	// Hardcoded bin values
-	xBins = 1 + (int) 800 / binSize;
-	yBins = 1 + (int) 600 / binSize;
-	totalBins = xBins*yBins;
+	m_xBins = 1 + (int) 800 / m_binSize;
+	m_yBins = 1 + (int) 600 / m_binSize;
+	m_totalBins = m_xBins*m_yBins;
 
-	vector<list<Agent*>> newBins(totalBins, list<Agent*>(10));
-	bins->assign(newBins);
+
+	vector<SpatialBin> newBins(m_totalBins, SpatialBin(m_binSize));
+	m_bins = *newBins;
 }
 
 AgentController::AgentController(const int newBinSize)
 {
-	binSize = newBinSize;
+	m_binSize = newBinSize;
 	// Hardcoded bin values
-	xBins = 1 + (int) 800 / binSize;
-	yBins = 1 + (int) 600 / binSize;
-	totalBins = xBins*yBins;
+	m_xBins = 1 + (int) 800 / m_binSize;
+	m_yBins = 1 + (int) 600 / m_binSize;
+	m_totalBins = m_xBins*m_yBins;
 
-	vector<list<Agent*>> newBins(totalBins, list<Agent*>(10));
-	bins = newBins;
+	vector<SpatialBin> newBins(m_totalBins, SpatialBin(m_binSize));
+	m_bins = m_newBins;
 }
 
 void AgentController::update( const Vec2i &mouseLoc, InterfaceParams &interfaceParams)
