@@ -20,7 +20,7 @@ AgentController::AgentController()
 	totalBins = xBins*yBins;
 
 	for(int i = 0; i < totalBins; i++){
-		gridBins.push_back(SpatialBin());
+		this->gridBins.push_back(SpatialBin());
 	}
 }
 

@@ -21,4 +21,4 @@ public:
 
 private:
 	list<Agent*> m_binnedAgents;
-}
+};

@@ -4,6 +4,7 @@
 
 #include "Agent.h"
 #include "InterfaceParams.h"
+#include "SpatialBin.h"
 
 using namespace ci;
 using namespace ci::app;

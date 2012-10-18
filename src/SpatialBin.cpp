@@ -6,7 +6,7 @@
 
 using namespace ci;
 using namespace ci::app;
-using std::list;
+using namespace std;
 
 SpatialBin::SpatialBin(){
 
