@@ -20,8 +20,8 @@ AgentController::AgentController()
 	totalBins = xBins*yBins;
 
 
-	vector<SpatialBin> newBins(totalBins, SpatialBin(binSize));
-	bins = *newBins;
+	vector<SpatialBin> newBins;
+	gridBins = *newBins;
 }
 
 AgentController::AgentController(const int newBinSize)
@@ -32,8 +32,8 @@ AgentController::AgentController(const int newBinSize)
 	yBins = 1 + (int) 600 / binSize;
 	totalBins = xBins*yBins;
 
-	vector<SpatialBin> newBins(totalBins, SpatialBin(binSize));
-	bins = newBins;
+	vector<SpatialBin> newBins;
+	gridBins = newBins;
 }
 
 void AgentController::update( const Vec2i &mouseLoc, InterfaceParams &interfaceParams)
@@ -130,7 +130,7 @@ void AgentController::sortAgentsIntoBins()
 	}
 
 	// Replace previous bin locations with new ones
-	bins = newBins;
+	gridBins = newBins;
 }
 
 void AgentController::getNearbyAgents(list<Agent*> &nearbyAgents, Vec3f centreLocation, float radius)
