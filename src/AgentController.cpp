@@ -19,9 +19,9 @@ AgentController::AgentController()
 	yBins = 1 + (int) 600 / binSize;
 	totalBins = xBins*yBins;
 
-
-	vector<SpatialBin> newBins;
-	gridBins = *newBins;
+	for(int i = 0; i < totalBins; i++){
+		gridBins.push_back(SpatialBin());
+	}
 }
 
 AgentController::AgentController(const int newBinSize)
@@ -32,8 +32,9 @@ AgentController::AgentController(const int newBinSize)
 	yBins = 1 + (int) 600 / binSize;
 	totalBins = xBins*yBins;
 
-	vector<SpatialBin> newBins;
-	gridBins = newBins;
+	for(int i = 0; i < totalBins; i++){
+		gridBins.push_back(SpatialBin());
+	}
 }
 
 void AgentController::update( const Vec2i &mouseLoc, InterfaceParams &interfaceParams)
