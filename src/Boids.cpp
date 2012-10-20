@@ -6,6 +6,7 @@
 #include "cinder/Utilities.h"
 #include "cinder/Camera.h"
 #include "cinder/params/Params.h"
+#include "cinder/Text.h"
 
 #include "AgentController.h"
 #include "InterfaceParams.h"
@@ -48,6 +49,11 @@ class Boids : public AppBasic {
 	void setupCamera();
 	void setupUIParameters();
 	
+	// Text layout for HUD
+	Font mFont;
+	//TextLayout mLayout;
+	//Texture mLayoutTexture;
+
 	// Drawing
 	void drawLine(const Vec3f &start, const Vec3f &end);
 	
@@ -119,6 +125,9 @@ void Boids::setup()
 
 	// Setup interface presets
 	setupUIParameters();
+
+	// Setup frame per second HUD
+	Font mFont = Font("Quicksand Book Regular", 12.0f);
 }
 
 void Boids::update()
@@ -149,6 +158,12 @@ void Boids::draw()
 		glDisable( GL_TEXTURE_2D );
 		mAgentController.draw();
 	}
+
+	float avgFPS = getAverageFps();
+	int totalAgentsCount = mAgentController.agentCount();
+
+	gl::drawString( "Framerate: " + toString(avgFPS), Vec2f( 10.0f, 10.0f ), Color::white(), mFont );
+	gl::drawString( "Agents: " + toString(totalAgentsCount), Vec2f( 10.0f, 25.0f ), Color::white(), mFont );
 
 	// Draw interface panel
 	params::InterfaceGl::draw();

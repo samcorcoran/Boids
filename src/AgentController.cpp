@@ -39,14 +39,6 @@ AgentController::AgentController(const int newBinSize)
 
 void AgentController::update( const Vec2i &mouseLoc, InterfaceParams &interfaceParams)
  {
-	//for(int i = 0; i < xBins; i++)
-	//{
-	//	for (int j = 0; j < yBins; j++ )
-	//	{
-	//		bins[i].clear();
-	//	}
-	//}
-
 	for( list<Agent>::iterator p = mAgents.begin(); p != mAgents.end(); ) {
 		if( p->mIsDead ){
 			p = mAgents.erase( p );
@@ -62,11 +54,12 @@ void AgentController::update( const Vec2i &mouseLoc, InterfaceParams &interfaceP
 			// Ensure location is in bounds
 			clampLocToTorus(p->mLoc);
 
-			
-
 			++p;
 		}
 	}
+
+	// Reorganise binning
+	//sortAgentsIntoBins();
 }
 
 void AgentController::draw()
@@ -157,4 +150,8 @@ int AgentController::convertLocToBin(Vec3f &loc)
 {
 	clampLocToTorus(loc);
 	return floor(loc.y*xBins) + ceil(loc.x);
+}
+
+int AgentController::agentCount(){
+	return (int)mAgents.size();
 }

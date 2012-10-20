@@ -23,6 +23,7 @@ class AgentController {
 	void sortAgentsIntoBins();
 	void getNearbyAgents(list<Agent*> &nearbyAgents, Vec3f centreLocation, float radius);
 	int convertLocToBin(Vec3f &loc);
+	int agentCount();
 
 	list<Agent>	mAgents;
 
