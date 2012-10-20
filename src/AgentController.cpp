@@ -13,23 +13,33 @@ using std::list;
 
 AgentController::AgentController()
 {
+	int screenWidth = 800;
+	int screenHeight = 600;
+
 	binSize = 100;
 	// Hardcoded bin values
-	xBins = 1 + (int) 800 / binSize;
-	yBins = 1 + (int) 600 / binSize;
+	//xBins = (int)( ceil( (float)(screenWidth/binSize)) );
+	//yBins = (int)( ceil( (float)(screenHeight/binSize)) );
+	xBins = 8;
+	yBins = 6;
+	//console() << "xBins: " << std::endl;// << xBins << std::endl;// << ", yBins: " << yBins << std::endl;
 	totalBins = xBins*yBins;
 
 	for(int i = 0; i < totalBins; i++){
-		gridBins.push_back(SpatialBin());
+		gridBins.push_back(SpatialBin(10));
 	}
 }
 
 AgentController::AgentController(const int newBinSize)
 {
+	int screenWidth = 800;
+	int screenHeight = 600;
+
 	binSize = newBinSize;
 	// Hardcoded bin values
-	xBins = 1 + (int) 800 / binSize;
-	yBins = 1 + (int) 600 / binSize;
+	xBins = (int)( (screenWidth/binSize) + (1 * ceil( (float)(screenWidth%binSize) )) );
+	yBins = (int)( (screenHeight/binSize) + (1 * ceil( (float)(screenHeight%binSize) )) );
+	console() << "xBins: " << xBins << ", yBins: " << yBins << std::endl;
 	totalBins = xBins*yBins;
 
 	for(int i = 0; i < totalBins; i++){
@@ -120,7 +130,7 @@ void AgentController::sortAgentsIntoBins()
 		{
 			// Update agent's bin for new location
 			int binNumber = convertLocToBin(p->mLoc);
-			//List &nextList = *newBins[binNumber];
+
 			Agent * nextAgent = &*p;
 			newBins[binNumber].addAgentToBin(&*p);
 		}
@@ -151,7 +161,8 @@ void AgentController::getNearbyAgents(list<Agent*> &nearbyAgents, Vec3f centreLo
 int AgentController::convertLocToBin(Vec3f &loc)
 {
 	clampLocToTorus(loc);
-	return floor(loc.y*xBins) + ceil(loc.x);
+	//console() << "locY: " << loc.y << ", locX: " << loc.x << std::endl;
+	return (floor(loc.y/binSize) * xBins) + (ceil(loc.x/binSize)-1);
 }
 
 // Given an agent, their location is used to obtain a binIndex and the agent pointer 
@@ -159,7 +170,7 @@ void AgentController::allocateAgentToABin(Agent * ptrAgent){
 	
 	int chosenBin = convertLocToBin(ptrAgent->mLoc);
 	console() << "Chosen bin: " << chosenBin << std::endl;
-	//gridBins[].addAgentToBin(ptrAgent);
+	gridBins[convertLocToBin(ptrAgent->mLoc)].addAgentToBin(ptrAgent);
 }
 
 int AgentController::agentCount(){

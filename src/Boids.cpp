@@ -113,6 +113,7 @@ void Boids::keyDown( KeyEvent event )
 void Boids::setup()
 {	
 	mMouseLoc = Vec2i( 0, 0 );
+
 	mMouseVel = Vec2f::zero();
 	interfaceParams.drawAgents = true;
 	mIsPressed = false;
@@ -133,10 +134,6 @@ void Boids::setup()
 
 	// Setup frame per second HUD
 	Font mFont = Font("Quicksand Book Regular", 12.0f);
-
-	vector<int> myVec;
-	myVec.push_back(1);
-	console() << "vec size:" << myVec.size() << std::endl;
 }
 
 void Boids::update()

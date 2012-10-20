@@ -1,6 +1,7 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/Rand.h"
 #include "cinder/Vector.h"
+#include "cinder/Utilities.h"
 #include "SpatialBin.h"
 #include "Agent.h"
 
@@ -13,7 +14,7 @@ SpatialBin::SpatialBin(){
 }
 
 SpatialBin::SpatialBin(const int maxBinSize){
-	m_binnedAgents = list<Agent*>(10);
+	m_binnedAgents = list<Agent*>(maxBinSize);
 }
 
 // Add passed agent to the list
