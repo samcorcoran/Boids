@@ -20,6 +20,7 @@
 
 using namespace ci;
 using namespace ci::app;
+using std::vector;
 
 class Boids : public AppBasic {
  public:
@@ -117,6 +118,10 @@ void Boids::setup()
 	mIsPressed = false;
 	mWindowDim = Vec2f(app::getWindowWidth(), app::getWindowHeight());
 
+	// Set up agent controller and bins
+	int binSize = 100;
+	mAgentController = AgentController(binSize);
+
 	// Setup the preset parameters
 	setupParameters();
 
@@ -128,6 +133,10 @@ void Boids::setup()
 
 	// Setup frame per second HUD
 	Font mFont = Font("Quicksand Book Regular", 12.0f);
+
+	vector<int> myVec;
+	myVec.push_back(1);
+	console() << "vec size:" << myVec.size() << std::endl;
 }
 
 void Boids::update()

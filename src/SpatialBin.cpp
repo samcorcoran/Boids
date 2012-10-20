@@ -17,7 +17,7 @@ SpatialBin::SpatialBin(const int maxBinSize){
 }
 
 // Add passed agent to the list
-void SpatialBin::addAgent(Agent * nextAgent){
+void SpatialBin::addAgentToBin(Agent * nextAgent){
 	m_binnedAgents.push_back(nextAgent);
 }
 

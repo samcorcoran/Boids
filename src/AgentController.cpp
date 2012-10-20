@@ -13,7 +13,7 @@ using std::list;
 
 AgentController::AgentController()
 {
-	binSize = 10;
+	binSize = 100;
 	// Hardcoded bin values
 	xBins = 1 + (int) 800 / binSize;
 	yBins = 1 + (int) 600 / binSize;
@@ -74,8 +74,10 @@ void AgentController::addAgents( int amt, const Vec2i &mouseLoc)
 {
 	for( int i=0; i<amt; i++ )
 	{
-		Vec2f loc = mouseLoc + Rand::randVec2f() * 5.0f;
+		//Vec2f loc = mouseLoc + Rand::randVec2f() * 5.0f; // random placement around mouse loc
+		Vec2f loc = mouseLoc; // Non-random placement
 		mAgents.push_back( Agent( loc, mAgents.size()+1 ) );
+		allocateAgentToABin(&mAgents.back());
 	}
 }
 
@@ -120,7 +122,7 @@ void AgentController::sortAgentsIntoBins()
 			int binNumber = convertLocToBin(p->mLoc);
 			//List &nextList = *newBins[binNumber];
 			Agent * nextAgent = &*p;
-			newBins[binNumber].addAgent(&*p);
+			newBins[binNumber].addAgentToBin(&*p);
 		}
 	}
 
@@ -150,6 +152,14 @@ int AgentController::convertLocToBin(Vec3f &loc)
 {
 	clampLocToTorus(loc);
 	return floor(loc.y*xBins) + ceil(loc.x);
+}
+
+// Given an agent, their location is used to obtain a binIndex and the agent pointer 
+void AgentController::allocateAgentToABin(Agent * ptrAgent){
+	
+	int chosenBin = convertLocToBin(ptrAgent->mLoc);
+	console() << "Chosen bin: " << chosenBin << std::endl;
+	//gridBins[].addAgentToBin(ptrAgent);
 }
 
 int AgentController::agentCount(){

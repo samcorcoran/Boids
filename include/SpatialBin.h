@@ -15,7 +15,7 @@ public:
 	SpatialBin::SpatialBin(const int maxBinSize);
 
 	// Insert agents into list
-	void addAgent(Agent * nextAgent);
+	void addAgentToBin(Agent * nextAgent);
 	// Return list for iteration
 	list<Agent*>::iterator getAgents();
 
