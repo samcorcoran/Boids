@@ -20,7 +20,7 @@ AgentController::AgentController()
 	totalBins = xBins*yBins;
 
 	for(int i = 0; i < totalBins; i++){
-		this->gridBins.push_back(SpatialBin());
+		gridBins.push_back(SpatialBin());
 	}
 }
 
@@ -115,7 +115,7 @@ void AgentController::clampLocToTorus(Vec3f &loc )
 void AgentController::sortAgentsIntoBins()
 {
 	// Binned locations for next round
-	vector<list<Agent*>> newBins(totalBins, list<Agent*>(10));
+	vector<SpatialBin> newBins; //(totalBins, list<Agent*>(10));
 
 	for( list<Agent>::iterator p = mAgents.begin(); p != mAgents.end(); ) {
 		if( p->mIsDead ){
@@ -126,7 +126,8 @@ void AgentController::sortAgentsIntoBins()
 			// Update agent's bin for new location
 			int binNumber = convertLocToBin(p->mLoc);
 			//List &nextList = *newBins[binNumber];
-			newBins[binNumber].push_back(p);
+			Agent * nextAgent = &*p;
+			newBins[binNumber].addAgent(&*p);
 		}
 	}
 
