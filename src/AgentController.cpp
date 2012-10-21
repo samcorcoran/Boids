@@ -141,13 +141,14 @@ void AgentController::sortAgentsIntoBins()
 	// Replace previous bin locations with new ones
 	gridBins = newBins;
 
-	printBinContents();
+	//printBinContents();
 }
 
 void AgentController::getNearbyAgents(list<Agent*> &nearbyAgents, Vec3f centreLocation, float radius)
 {
 	// calculate number of surrounding bins required to search
 	int radiusInBins = ceil(radius/binSize);
+	// search area is a square of bins, search grid width is bin-length of side
 	int searchGridWidth = (radiusInBins*2)+1;
 
 	// iterate through columns and rows of search grid
@@ -155,9 +156,14 @@ void AgentController::getNearbyAgents(list<Agent*> &nearbyAgents, Vec3f centreLo
 	{
 		for (int j = -radiusInBins;  j < radiusInBins+1; j++)
 		{
-			int nextBin = convertLocToBin(Vec3f(centreLocation.x + j*binSize, centreLocation.y+i*binSize, 0)); 
+			int nextBinIndex = convertLocToBin(Vec3f(centreLocation.x + j*binSize, centreLocation.y+i*binSize, 0)); 
 			// push pointers for all agents in this bin into nearbyAgents
-			//nearbyAgents.push()
+			
+			list<Agent*>::iterator agentItr = gridBins[nextBinIndex].getAgents();
+			for(int nextAgentNumber = 0; nextAgentNumber < gridBins[nextBinIndex].numBinnedAgents(); nextAgentNumber++){
+				nearbyAgents.push_back(*agentItr);
+				agentItr++;
+			}
 		}
 	}
 }
