@@ -19,6 +19,8 @@ public:
 	// Return list for iteration
 	list<Agent*>::iterator getAgents();
 
+	int numBinnedAgents();
+
 private:
 	list<Agent*> m_binnedAgents;
 };

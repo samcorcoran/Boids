@@ -18,15 +18,13 @@ AgentController::AgentController()
 
 	binSize = 100;
 	// Hardcoded bin values
-	//xBins = (int)( ceil( (float)(screenWidth/binSize)) );
-	//yBins = (int)( ceil( (float)(screenHeight/binSize)) );
-	xBins = 8;
-	yBins = 6;
-	//console() << "xBins: " << std::endl;// << xBins << std::endl;// << ", yBins: " << yBins << std::endl;
+	xBins = (int)( ceil( (float)(screenWidth/binSize)) );
+	yBins = (int)( ceil( (float)(screenHeight/binSize)) );
+	
 	totalBins = xBins*yBins;
 
 	for(int i = 0; i < totalBins; i++){
-		gridBins.push_back(SpatialBin(10));
+		gridBins.push_back(SpatialBin());
 	}
 }
 
@@ -37,9 +35,9 @@ AgentController::AgentController(const int newBinSize)
 
 	binSize = newBinSize;
 	// Hardcoded bin values
-	xBins = (int)( (screenWidth/binSize) + (1 * ceil( (float)(screenWidth%binSize) )) );
-	yBins = (int)( (screenHeight/binSize) + (1 * ceil( (float)(screenHeight%binSize) )) );
-	console() << "xBins: " << xBins << ", yBins: " << yBins << std::endl;
+	xBins = (int)( ceil( (float)(screenWidth/binSize)) );
+	yBins = (int)( ceil( (float)(screenHeight/binSize)) );
+	
 	totalBins = xBins*yBins;
 
 	for(int i = 0; i < totalBins; i++){
@@ -69,7 +67,7 @@ void AgentController::update( const Vec2i &mouseLoc, InterfaceParams &interfaceP
 	}
 
 	// Reorganise binning
-	//sortAgentsIntoBins();
+	sortAgentsIntoBins();
 }
 
 void AgentController::draw()
@@ -121,8 +119,12 @@ void AgentController::sortAgentsIntoBins()
 {
 	// Binned locations for next round
 	vector<SpatialBin> newBins; //(totalBins, list<Agent*>(10));
+	for(int i = 0; i < totalBins; i++){
+		newBins.push_back(SpatialBin());
+	}
 
-	for( list<Agent>::iterator p = mAgents.begin(); p != mAgents.end(); ) {
+	for( list<Agent>::iterator p = mAgents.begin(); p != mAgents.end(); p++) {
+		
 		if( p->mIsDead ){
 			p = mAgents.erase( p );
 		}
@@ -138,6 +140,8 @@ void AgentController::sortAgentsIntoBins()
 
 	// Replace previous bin locations with new ones
 	gridBins = newBins;
+
+	printBinContents();
 }
 
 void AgentController::getNearbyAgents(list<Agent*> &nearbyAgents, Vec3f centreLocation, float radius)
@@ -175,4 +179,15 @@ void AgentController::allocateAgentToABin(Agent * ptrAgent){
 
 int AgentController::agentCount(){
 	return (int)mAgents.size();
+}
+
+void AgentController::printBinContents(){
+	console() << "Bin contents: " << std::endl;
+	int binContents = -1;
+	for(int i = 0; i < gridBins.size(); i++){
+		binContents = gridBins[i].numBinnedAgents();
+		if(binContents != 0){
+			console() << i << " contains: " << binContents << std::endl;
+		}
+	}
 }

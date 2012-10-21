@@ -25,6 +25,7 @@ class AgentController {
 	int convertLocToBin(Vec3f &loc);
 	void allocateAgentToABin(Agent * agent);
 	int agentCount();
+	void printBinContents();
 
 	list<Agent>	mAgents;
 

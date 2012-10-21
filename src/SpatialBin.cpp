@@ -22,6 +22,11 @@ void SpatialBin::addAgentToBin(Agent * nextAgent){
 	m_binnedAgents.push_back(nextAgent);
 }
 
+// Return number of agents in this bin
+int SpatialBin::numBinnedAgents(){
+	return m_binnedAgents.size();
+}
+
 // Return iterator over agents in this bin
 list<Agent*>::iterator SpatialBin::getAgents(){
 	return m_binnedAgents.begin();
