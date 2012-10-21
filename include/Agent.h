@@ -4,6 +4,7 @@
 #include "cinder/Color.h"
 #include "cinder/Perlin.h"
 #include "InterfaceParams.h"
+#include "AgentController.h"
 #include <list>
 #include <vector>
 
@@ -27,6 +28,7 @@ class Agent {
 	void Agent::printAgentVectors();
 
 	void collectNeighbouringAgents(std::list<Agent*> &neighbouringAgents);
+	friend void getNearbyAgents (AgentController);
 
 	ci::Vec3f	mLoc;
 	ci::Vec2f	mVel;
