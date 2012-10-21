@@ -22,6 +22,9 @@ using namespace ci;
 using namespace ci::app;
 using std::vector;
 
+// Controller for managing agents
+AgentController mAgentController;
+
 class Boids : public AppBasic {
  public:
 	// 
@@ -67,11 +70,7 @@ class Boids : public AppBasic {
 	// Parameters ui panel
 	params::InterfaceGl mParams;
 	// Parameters storage
-	InterfaceParams interfaceParams;
-
-	// Controller for managing agents
-	AgentController mAgentController;
-		
+	InterfaceParams interfaceParams;	
 };
 
 void Boids::prepareSettings( Settings *settings )

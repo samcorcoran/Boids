@@ -7,6 +7,7 @@
 
 #include "Agent.h"
 #include "InterfaceParams.h"
+#include "AgentController.h"
 
 #include <list>
 #include <cmath>
@@ -45,9 +46,12 @@ Agent::Agent( Vec2f loc, int newAgentId )
 	lastNewHeading = Vec2f::zero();
 }	
 
-void Agent::update( const ci::Vec2i &mouseLoc, std::list<Agent> &neighbourAgents, InterfaceParams &interfaceParams )
+void Agent::update( const ci::Vec2i &mouseLoc, std::list<Agent> &agentList, InterfaceParams &interfaceParams )
 {	
-	calculateNewHeading(neighbourAgents, mouseLoc, interfaceParams);
+	std::list<Agent*> neighbouringAgents;
+	collectNeighbouringAgents(neighbouringAgents);
+
+	calculateNewHeading(neighbouringAgents, mouseLoc, interfaceParams);
 
 	moveByVelocity();
 }
@@ -153,7 +157,7 @@ void Agent::rotateAgentBy(double angle)
 	//app::console() << "New vel: " << mVel << std::endl;
 }
 
-void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const ci::Vec2i &mouseLoc, InterfaceParams interfaceParams ){
+void Agent::calculateNewHeading(std::list<Agent*> &neighbourAgents, const ci::Vec2i &mouseLoc, InterfaceParams interfaceParams ){
 
 	// Sum of Weights
 	float totalWeights = interfaceParams.mAlignmentWeight + interfaceParams.mCohesionWeight + interfaceParams.mCohesionWeight + interfaceParams.mRandWeight;
@@ -200,15 +204,18 @@ void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const ci::Vec
 	if (cohesionDistance > visualRange) visualRange = cohesionDistance;
 	if (separationDistance > visualRange) visualRange = separationDistance;
 
-		
-	for( list<Agent>::iterator p = neighbourAgents.begin(); p != neighbourAgents.end(); ++p )
+	Agent * nextNeighbour;
+	for( list<Agent*>::iterator p = neighbourAgents.begin(); p != neighbourAgents.end(); ++p )
 	{
-		if ( p->mLoc != mLoc )
+		nextNeighbour = *p;
+
+		// Check for co-location, so agent can ignore self
+		if ( nextNeighbour->mLoc != mLoc )
 		{
 			// Retrieve heading to nextAgent
 			ci::Vec3f vecToNextAgent = ci::Vec3f::zero();
-			//vecToNextAgent = toroidalVectorTo(mLoc, p->mLoc);	
-			vecToNextAgent = p->mLoc - mLoc;	
+			//vecToNextAgent = toroidalVectorTo(mLoc, nextNeighbour->mLoc);	
+			vecToNextAgent = nextNeighbour->mLoc - mLoc;	
 
 			// Exclude agents behind this one
 			float exclude = (mVel.safeNormalized().dot(Vec2f(vecToNextAgent.x, vecToNextAgent.y).safeNormalized())+1);
@@ -216,7 +223,7 @@ void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const ci::Vec
 			if (exclude > rearIgnoranceArc)
 			{
 				// Calculate similarity between self and nextAgent
-				float vecSimilarity = (mVel.safeNormalized().dot((p->mVel).safeNormalized()) + 1) / 2;
+				float vecSimilarity = (mVel.safeNormalized().dot((nextNeighbour->mVel).safeNormalized()) + 1) / 2;
 
 				// Check nextAgent's heading is similar enough for cohesion and near enough
 				if (vecSimilarity > cohesionCompatabilityThresh && vecToNextAgent.length() < cohesionDistance )
@@ -232,7 +239,7 @@ void Agent::calculateNewHeading(std::list<Agent> &neighbourAgents, const ci::Vec
 				if (vecSimilarity > alignmentCompatabilityThresh &&	vecToNextAgent.length() < alignmentDistance )
 				{ 
 					// Normalize influence heading so fast movers are not prioritised
-					alignmentHeading = alignmentHeading + (p->mVel).safeNormalized();
+					alignmentHeading = alignmentHeading + (nextNeighbour->mVel).safeNormalized();
 					alignmentPartners++;
 				}
 				else {
@@ -359,6 +366,10 @@ ci::Vec3f Agent::toroidalVectorTo(const ci::Vec3f &start, const ci::Vec3f &end){
 	//console() << "Resulting vecToEnd: " << vecToEnd << std::endl;
 	
 	return vecToEnd;
+}
+
+void Agent::collectNeighbouringAgents(std::list<Agent*> &neighbouringAgents){
+	return getNearbyAgents(neighbouringAgents, this->mLoc, this->mVisualDistance);
 }
 
 void Agent::printAgentVectors(){

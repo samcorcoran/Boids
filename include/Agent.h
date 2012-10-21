@@ -22,9 +22,11 @@ class Agent {
 	void turnTowardsHeading(ci::Vec2f desiredHeading);
 	void rotate(ci::Vec2f &vec, double angle);
 	void rotateAgentBy(double angle);
-	void calculateNewHeading(std::list<Agent> &mAgents, const ci::Vec2i &mouseLoc, InterfaceParams interfaceParams );
+	void calculateNewHeading(std::list<Agent*> &mAgents, const ci::Vec2i &mouseLoc, InterfaceParams interfaceParams );
 	ci::Vec3f toroidalVectorTo(const ci::Vec3f &start, const ci::Vec3f &end );
 	void Agent::printAgentVectors();
+
+	void collectNeighbouringAgents(std::list<Agent*> &neighbouringAgents);
 
 	ci::Vec3f	mLoc;
 	ci::Vec2f	mVel;
