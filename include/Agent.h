@@ -1,14 +1,19 @@
 #pragma once
+
+#ifndef AGENT_H
+#define AGENT_H
+
 #include "cinder/Channel.h"
 #include "cinder/Vector.h"
 #include "cinder/Color.h"
 #include "cinder/Perlin.h"
 #include "InterfaceParams.h"
-#include "AgentController.h"
-#include <list>
-#include <vector>
+//#include "AgentController.h"
 
-;
+// These are declared in AgentController.h
+//#include <list>
+//#include <vector>
+
 using namespace ci;
 using namespace ci::app;
 
@@ -28,7 +33,7 @@ class Agent {
 	void Agent::printAgentVectors();
 
 	void collectNeighbouringAgents(std::list<Agent*> &neighbouringAgents);
-	friend void getNearbyAgents (AgentController);
+	//friend void getNearbyAgents (AgentController);
 
 	ci::Vec3f	mLoc;
 	ci::Vec2f	mVel;
@@ -54,3 +59,5 @@ class Agent {
 	ci::Vec2f lastRand;
 	ci::Vec2f lastNewHeading;
 };
+
+#endif

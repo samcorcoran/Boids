@@ -7,11 +7,11 @@
 
 #include "Agent.h"
 #include "InterfaceParams.h"
-#include "AgentController.h"
+//#include "AgentController.h"
 
-#include <list>
+//#include <list>
 #include <cmath>
-#include <vector>
+//#include <vector>
 
 using namespace ci;
 using namespace ci::app;
@@ -369,7 +369,7 @@ ci::Vec3f Agent::toroidalVectorTo(const ci::Vec3f &start, const ci::Vec3f &end){
 }
 
 void Agent::collectNeighbouringAgents(std::list<Agent*> &neighbouringAgents){
-	return getNearbyAgents(neighbouringAgents, this->mLoc, this->mVisualDistance);
+	//getNearbyAgents(neighbouringAgents, this->mLoc, this->mVisualDistance);
 }
 
 void Agent::printAgentVectors(){
