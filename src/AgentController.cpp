@@ -172,7 +172,7 @@ int AgentController::convertLocToBin(Vec3f &loc)
 {
 	clampLocToTorus(loc);
 	//console() << "locY: " << loc.y << ", locX: " << loc.x << std::endl;
-	return (floor(loc.y/binSize) * xBins) + (ceil(loc.x/binSize)-1);
+	return (int)(floor(loc.y/binSize) * xBins) + (ceil(loc.x/binSize)-1);
 }
 
 // Given an agent, their location is used to obtain a binIndex and the agent pointer 
