@@ -48,6 +48,7 @@ Agent::Agent( Vec2f loc, int newAgentId )
 
 void Agent::update( const ci::Vec2i &mouseLoc, std::list<Agent*> &agentList, InterfaceParams &interfaceParams )
 {	
+	//console() << "Agent " << this->agentId << " has possible neighbours: " << agentList.size() << "!"  << std::endl;
 	calculateNewHeading(agentList, mouseLoc, interfaceParams);
 	moveByVelocity();
 }
