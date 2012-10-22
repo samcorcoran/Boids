@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef SPATIALBIN_H
+#define SPATIALBIN_H
+
 #include "Agent.h"
 #include "cinder/Vector.h"
 #include <list>
@@ -24,3 +27,5 @@ public:
 private:
 	list<Agent*> m_binnedAgents;
 };
+
+#endif
