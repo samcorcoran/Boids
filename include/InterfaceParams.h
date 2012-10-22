@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef INTERFACEPARAMS_H
+#define INTERFACEPARAMS_H
+
 #include "cinder/Channel.h"
 #include "cinder/Vector.h"
 #include "cinder/Color.h"
@@ -26,4 +30,6 @@ struct InterfaceParams {
 	float mCohesionCompatabilityThresh;
 
 	bool drawAgents;
-}
+};
+
+#endif

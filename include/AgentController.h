@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef AGENTCONTROLLER_H
+#define AGENTCONTROLLER_H
+
 #include <list>
 #include <vector>
 
@@ -38,3 +42,5 @@ class AgentController {
 	int totalBins;
 	
 };
+
+#endif
