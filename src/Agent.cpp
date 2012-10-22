@@ -46,13 +46,9 @@ Agent::Agent( Vec2f loc, int newAgentId )
 	lastNewHeading = Vec2f::zero();
 }	
 
-void Agent::update( const ci::Vec2i &mouseLoc, std::list<Agent> &agentList, InterfaceParams &interfaceParams )
+void Agent::update( const ci::Vec2i &mouseLoc, std::list<Agent*> &agentList, InterfaceParams &interfaceParams )
 {	
-	std::list<Agent*> neighbouringAgents;
-	collectNeighbouringAgents(neighbouringAgents);
-
-	calculateNewHeading(neighbouringAgents, mouseLoc, interfaceParams);
-
+	calculateNewHeading(agentList, mouseLoc, interfaceParams);
 	moveByVelocity();
 }
 

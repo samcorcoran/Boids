@@ -57,7 +57,7 @@ void AgentController::update( const Vec2i &mouseLoc, InterfaceParams &interfaceP
 			getNearbyAgents(nearbyAgents, p->mLoc, p->mVisualDistance);
 
 			// Update agent's location
-			p->update( mouseLoc, mAgents, interfaceParams );
+			p->update( mouseLoc, nearbyAgents, interfaceParams );
 
 			// Ensure location is in bounds
 			clampLocToTorus(p->mLoc);

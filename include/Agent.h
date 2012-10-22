@@ -21,7 +21,7 @@ class Agent {
  public:
 	Agent();
 	Agent( ci::Vec2f loc, int newAgentId );
-	void update( const ci::Vec2i &mouseLoc, std::list<Agent> &mAgents, InterfaceParams &interfaceParams);
+	void update( const ci::Vec2i &mouseLoc, std::list<Agent*> &mAgents, InterfaceParams &interfaceParams);
 	void draw();
 	void drawVector(ci::Vec3f startLoc, ci::Vec3f vecToDraw, ci::Color chosenColor);
 	void moveByVelocity();
