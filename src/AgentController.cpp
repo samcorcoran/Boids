@@ -13,10 +13,10 @@ using std::list;
 
 AgentController::AgentController()
 {
-	int screenWidth = 800;
-	int screenHeight = 600;
-
+	screenWidth = 800;
+	screenHeight = 600;
 	binSize = 100;
+
 	// Hardcoded bin values
 	xBins = (int)( ceil( (float)(screenWidth/binSize)) );
 	yBins = (int)( ceil( (float)(screenHeight/binSize)) );
@@ -28,10 +28,10 @@ AgentController::AgentController()
 	}
 }
 
-AgentController::AgentController(const int newBinSize)
+AgentController::AgentController(const int newBinSize, const int newScreenWidth, const int newScreenHeight)
 {
-	int screenWidth = 800;
-	int screenHeight = 600;
+	screenWidth = newScreenWidth;
+	screenHeight = newScreenHeight;
 
 	binSize = newBinSize;
 	// Hardcoded bin values
@@ -99,7 +99,7 @@ void AgentController::removeAgents( int amt )
 
 void AgentController::clampLocToTorus(Vec3f &loc )
 {
-	Vec2f windowDim = Vec2f(800,600);
+	Vec2f windowDim = Vec2f(screenWidth, screenHeight);
 	// clamp x
 	if (loc.x < 0) { 
 		loc.x  += windowDim.x;

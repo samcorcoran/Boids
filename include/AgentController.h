@@ -18,7 +18,7 @@ using std::vector;
 class AgentController {
  public:
 	AgentController();
-	AgentController(const int binSize);
+	AgentController(const int binSize, const int newScreenWidth, const int newScreenHeight);
 	void update( const ci::Vec2i &mouseLoc, InterfaceParams &interfaceParams );
 	void draw();
 	void addAgents( int amt, const ci::Vec2i &mouseLoc );
@@ -30,6 +30,9 @@ class AgentController {
 	void allocateAgentToABin(Agent * agent);
 	int agentCount();
 	void printBinContents();
+
+	int screenWidth;
+	int screenHeight;
 
 	list<Agent>	mAgents;
 

@@ -14,9 +14,11 @@
 
 #define RESOLUTION 10
 #define NUM_AGENTS_TO_SPAWN 1
-#define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH 800
-#define BIN_SIZE 25;
+#define WINDOW_HEIGHT 600
+//#define WINDOW_WIDTH 1200
+//#define WINDOW_HEIGHT 900
+#define BIN_SIZE 200;
 
 using namespace ci;
 using namespace ci::app;
@@ -119,8 +121,10 @@ void Boids::setup()
 	mWindowDim = Vec2f(app::getWindowWidth(), app::getWindowHeight());
 
 	// Set up agent controller and bins
-	int binSize = 100;
-	mAgentController = AgentController(binSize);
+	const int binSize = BIN_SIZE;
+	const int windowWidth = WINDOW_WIDTH;
+	const int windowHeight = WINDOW_HEIGHT;
+	mAgentController = AgentController(binSize, windowWidth, windowHeight);
 
 	// Setup the preset parameters
 	setupParameters();
@@ -164,9 +168,9 @@ void Boids::draw()
 		mAgentController.draw();
 	}
 
+	// Draw HUD infos
 	float avgFPS = getAverageFps();
 	int totalAgentsCount = mAgentController.agentCount();
-
 	gl::drawString( "Framerate: " + toString(avgFPS), Vec2f( 10.0f, 10.0f ), Color::white(), mFont );
 	gl::drawString( "Agents: " + toString(totalAgentsCount), Vec2f( 10.0f, 25.0f ), Color::white(), mFont );
 
