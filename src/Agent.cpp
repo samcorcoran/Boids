@@ -63,15 +63,9 @@ void Agent::draw()
 
 	Vec3f p1 = mLoc;
     Vec3f p2(Vec2f(mLoc.x, mLoc.y) + (mVel.normalized()*arrowLength));
-
+	
+	//gl::drawSolidCircle(Vec2f(mLoc.x, mLoc.y),2.0f);
 	gl::drawVector(p1, p2, headLength, headRadius );
-
-	// Draw cohesion vector
-	drawVector(p1, Vec3f(lastCohesion, 0.0f), Color( 1.0f, 0.0f, 0.0f ) );
-	// Draw alignment vector		
-	drawVector(p1, Vec3f(lastAlignment, 0.0f), Color( 0.0f, 1.0f, 0.0f ) );
-	// Draw separation vector
-	drawVector(p1, Vec3f(lastSeparation, 0.0f), Color( 1.0f, 0.0f, 1.0f ) );
 	
 	gl::color( Color( 1.0f, 1.0f, 1.0f ) );
 }
@@ -92,6 +86,18 @@ void Agent::drawVector(ci::Vec3f startLoc, ci::Vec3f vecToDraw, Color chosenColo
 		//console() << "Drawing vec: " << vecToDraw << ", fromTo "<< startLoc << " " << startLoc+vecToDraw << ", len: " << vecToDraw.length() << std::endl;
 		gl::drawVector(startLoc, startLoc+(vecToDraw*scaleFactor), headLength, headRadius );
 	}
+}
+
+void Agent::drawCASInfluenceVectors(bool drawCohesion, bool drawAlignment, bool drawSeparation)
+{
+	// Draw cohesion vector
+	if(drawCohesion) drawVector(mLoc, Vec3f(lastCohesion, 0.0f), Color( 1.0f, 0.0f, 0.0f ) );
+		
+	// Draw alignment vector		
+	if(drawAlignment) drawVector(mLoc, Vec3f(lastAlignment, 0.0f), Color( 0.0f, 1.0f, 0.0f ) );
+	
+	// Draw separation vector
+	if(drawSeparation) drawVector(mLoc, Vec3f(lastSeparation, 0.0f), Color( 1.0f, 0.0f, 1.0f ) );
 }
 
 // Adjusts mVel in direction of desired heading to as great a degree as maxTurn allows

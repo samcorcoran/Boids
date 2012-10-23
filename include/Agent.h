@@ -24,10 +24,13 @@ class Agent {
 	void update( const ci::Vec2i &mouseLoc, std::list<Agent*> &mAgents, InterfaceParams &interfaceParams);
 	void draw();
 	void drawVector(ci::Vec3f startLoc, ci::Vec3f vecToDraw, ci::Color chosenColor);
+	void Agent::drawCASInfluenceVectors(bool drawCohesion, bool drawAlignment, bool drawSeparation);
+
 	void moveByVelocity();
 	void turnTowardsHeading(ci::Vec2f desiredHeading);
 	void rotate(ci::Vec2f &vec, double angle);
 	void rotateAgentBy(double angle);
+
 	void calculateNewHeading(std::list<Agent*> &mAgents, const ci::Vec2i &mouseLoc, InterfaceParams interfaceParams );
 	ci::Vec3f toroidalVectorTo(const ci::Vec3f &start, const ci::Vec3f &end );
 	void Agent::printAgentVectors();
