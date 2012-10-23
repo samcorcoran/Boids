@@ -118,11 +118,12 @@ void AgentController::clampLocToTorus(Vec3f &loc )
 void AgentController::sortAgentsIntoBins()
 {
 	// Binned locations for next round
-	vector<SpatialBin> newBins; //(totalBins, list<Agent*>(10));
+	vector<SpatialBin> newBins; 
 	for(int i = 0; i < totalBins; i++){
 		newBins.push_back(SpatialBin());
 	}
 
+	/*
 	for( list<Agent>::iterator p = mAgents.begin(); p != mAgents.end(); p++) {
 		
 		if( p->mIsDead ){
@@ -137,9 +138,30 @@ void AgentController::sortAgentsIntoBins()
 			newBins[binNumber].addAgentToBin(&*p);
 		}
 	}
+	*/
+
+	for(int currentBinIndex = 0; currentBinIndex < totalBins; currentBinIndex++){
+		
+		int binnedAgents = gridBins[currentBinIndex].numBinnedAgents();
+		list<Agent*>::iterator itrAgents = gridBins[currentBinIndex].getAgents();
+
+		for(int i = 0; i < binnedAgents; i++){
+
+			Agent * nextAgent = *itrAgents;
+			// Check if the agent is allocated to the correct bin
+			if(convertLocToBin(nextAgent->mLoc) != currentBinIndex){
+				gridBins[currentBinIndex].erase(itrAgents);
+			}
+
+			// Increment the iterator
+			itrAgents++;
+		}
+	}
 
 	// Replace previous bin locations with new ones
-	gridBins = newBins;
+	gridBins.swap(newBins);
+
+	//delete newBins;
 
 	//printBinContents();
 }
