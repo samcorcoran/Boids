@@ -37,7 +37,7 @@ Agent::Agent( Vec2f loc, int newAgentId )
 	mLifespan		= Rand::randInt( 50, 250 );
 	mAgePer			= 1.0f;
 	mIsDead			= false;
-	mVisualDistance = 150.0f;
+	mVisualDistance = 50.0f;
 
 	lastSeparation = Vec2f::zero();
 	lastCohesion = Vec2f::zero();
